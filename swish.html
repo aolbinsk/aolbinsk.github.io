@@ -85,4 +85,13 @@ createApp({
 <div id="app">
   <H1>Tack för anmälan</H1>
   <a :href="paymentLink">Tryck nu här för att betala med Swish</a>
+  <hr style="margin-top: 20px"/>
+  <div>
+  Om du inte kan swisha via länken ovan så öppna själv Swish och ange:
+  <ul>
+    <li><i>{{ number }}</i> som mottagare,</li>
+    <li><i>{{ amount }}</i> som belopp,</li>
+    <li><i>{{ message }}</i> i meddelandet.</li>
+  </ul>   
+  </div>
 </div>
