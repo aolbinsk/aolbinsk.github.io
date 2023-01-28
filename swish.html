@@ -72,10 +72,13 @@ createApp({
   data() {
     return {
       paymentLink: swishLink({
-      	number:"1236715601", 
-        amount:params.amount, 
+      	number: "0704868771", 
+        amount: params.amount, 
         message: params.activity + "," + params.name + "," + params.ssid
-        })      
+        }),      
+      number: "0704868771", 
+      amount: params.amount, 
+      message: params.activity + "," + params.name + "," + params.ssid         
     }
   }
 }).mount('#app')
