@@ -53,7 +53,7 @@ function getAllUrlParams(url) {
 const swishLink = payment => {
   return `swish://payment?data=${encodeURIComponent(
     buildSwishPayment(payment)
-  )}&callbackurl=${"https://tsknerf.se/done"}&callbackresultparameter=res`
+  )}`
 }
 
 const buildSwishPayment = ({ amount, message, number }) =>
