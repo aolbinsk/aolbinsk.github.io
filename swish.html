@@ -22,6 +22,7 @@ function getAllUrlParams(url) {
 
       paramName = paramName.toLowerCase();
       //if (typeof paramValue === 'string') paramValue = paramValue.toLowerCase();
+      if (typeof paramValue === 'string') paramValue = decodeURIComponent(paramValue);
 
       if (paramName.match(/\[(\d+)?\]$/)) {
         var key = paramName.replace(/\[(\d+)?\]/, '');
