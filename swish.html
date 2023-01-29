@@ -53,7 +53,7 @@ function getAllUrlParams(url) {
 const swishLink = payment => {
   return `swish://payment?data=${encodeURIComponent(
     buildSwishPayment(payment)
-  )}`
+  )}&callbackurl=${"https://tsknerf.se/done"}&callbackresultparameter=res`
 }
 
 const buildSwishPayment = ({ amount, message, number }) =>
@@ -65,7 +65,7 @@ const buildSwishPayment = ({ amount, message, number }) =>
   })
 
 var params = getAllUrlParams();  
-  
+ 
 import { createApp } from 'vue'
 
 createApp({
@@ -78,30 +78,73 @@ createApp({
         }),      
       number: "1236715601", 
       amount: params.amount, 
-      message: params.activity + "," + params.name + "," + params.ssid         
+      message: params.activity + "," + params.name + "," + params.ssid,
+      qrcode: "",
+      activity: params.activity
     }
+  },
+  created() {
+    fetch("https://api.swish.nu/qr/v2/prefilled", {
+      method: "POST",
+      body: JSON.stringify({
+        'payee': '123456789',
+        'amount': {
+            'value': 100,
+            'editable': false,
+        },
+        'message': {
+            'value': 'test message',
+            'editable': false,
+        },
+        'size': 300,
+    }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }
+    }).then(res => {
+    		if(res.ok) {
+        	return res.blob()
+        } 
+        return res.text().then(text => {throw new Error(text)})
+      })
+      .then(imageBlob => {
+          // Then create a local URL for that image and print it 
+          const imageObjectURL = URL.createObjectURL(imageBlob);
+          //console.log(imageObjectURL);
+          this.qrcode = imageObjectURL
+          console.log(this.qrcode);
+      });  
+    }  
   }
-}).mount('#app')
+).mount('#app')
 </script>
+
 <link type="text/css" rel="stylesheet" href="https://cdn01.jotfor.ms/themes/CSS/defaultV2.css?v=b2b1dea
 "/>
 
 <style>
 body {
-    font-size: 3vw;
+    font-size: 2.5vw;    
 }
 </style>
 
 <div id="app">
-  <H1>Tack för anmälan</H1>
-  <a :href="paymentLink">Tryck nu här för att betala med Swish</a>
+  <H1>Tack för anmälan till {{ activity }}</H1>
+  <div style="margin: 20px">
+    <a :href="paymentLink">Tryck här för att betala med Swish</a>
+  </div>  
   <hr style="margin-top: 20px"/>
-  <div>
-  Om du inte kan swisha via länken ovan så öppna själv Swish och ange:
+  <div style="margin: 20px">
+    Eller scanna nedan kod med Swish appen från din mobil.
+    <img :src="qrcode" style="margin: 20px">
+  </div>  
+  <hr style="margin-top: 20px"/>
+  <div style="margin: 20px">
+  Om du inte kan swisha via länken ovan eller scanna qr-koden så öppna själv Swish och ange:
   <ul>
-    <li><i>{{ number }}</i> som mottagare,</li>
-    <li><i>{{ amount }}</i> som belopp,</li>
-    <li><i>{{ message }}</i> i meddelandet.</li>
+    <li>Mottagare: <i>{{ number }}</i></li>
+    <li>Belopp: <i>{{ amount }}</i></li>
+    <li>Meddelande: <i>{{ message }}</i></li>
   </ul>   
   </div>
 </div>
