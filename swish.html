@@ -65,6 +65,8 @@ const buildSwishPayment = ({ amount, message, number }) =>
   })
 
 var params = getAllUrlParams();  
+var message = params.activity + "," + params.name + "," + params.ssid;
+var amount = typeof(params.amount) === 'undefined' ? 400 : params.amount;
  
 import { createApp } from 'vue'
 
@@ -74,11 +76,11 @@ createApp({
       paymentLink: swishLink({
       	number: "1236715601", 
         amount: params.amount, 
-        message: params.activity + "," + params.name + "," + params.ssid
+        message: message
         }),      
       number: "1236715601", 
       amount: params.amount, 
-      message: params.activity + "," + params.name + "," + params.ssid,
+      message: message,
       qrcode: "",
       activity: params.activity
     }
@@ -89,14 +91,14 @@ createApp({
       body: JSON.stringify({
         'payee': '1236715601',
         'amount': {
-            'value': 100,
+            'value': amount,
             'editable': false,
         },
         'message': {
-            'value': 'test message',
+            'value': message,
             'editable': false,
         },
-        'size': 400,
+        'size': 300,
     }),
       headers: {
         "Content-type": "application/json; charset=UTF-8"
