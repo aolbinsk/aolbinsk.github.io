@@ -66,7 +66,7 @@ const buildSwishPayment = ({ amount, message, number }) =>
 
 var params = getAllUrlParams();  
 var message = params.activity + "," + params.name + "," + params.ssid;
-var amount = typeof(params.amount) === 'undefined' ? 400 : params.amount;
+var amount = typeof(params.amount) === 'undefined' ? 400 : parseInt(params.amount);
  
 import { createApp } from 'vue'
 
